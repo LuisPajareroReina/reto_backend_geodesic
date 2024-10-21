@@ -29,14 +29,20 @@ def get_usuario_flask(id_usuario):
     if usuario:
         info_usuario = {
             'id_usuario': usuario.id_usuario,
-            'Nombre' : usuario.nombre,
+            'Nombre': usuario.nombre,
             'Apellido': usuario.apellido,
             'Empresa': usuario.empresa
         }
 
         lista_puntos_acceso = usuario_servicio.get_puntos_acceso(id_usuario)
+
         info_usuario['Puntos con acceso'] = lista_puntos_acceso
+        lista_instalaciones_acceso = usuario_servicio.get_instalaciones_acceso(id_usuario)
+        info_usuario['Instalaciones con acceso'] = lista_instalaciones_acceso
+
+        #ToDo: log
+
         return info_usuario
 
-    return "Error obteninedo Usuario"
+    return "Usuario no existe/no se encuentra"
 

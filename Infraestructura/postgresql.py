@@ -48,3 +48,25 @@ class UsuarioBBDD:
         cur.close()
         conn.close()
         return result
+
+    def get_instalaciones_acceso_bbdd(self, id_usuario):
+        conn = self.conexion_bbdd()
+        cur = conn.cursor()
+        cur.execute("""
+                            SELECT DISTINCT
+                                P.nombre_instalacion
+                            FROM 
+                                Usuarios U
+                            JOIN 
+                                Perfil_acceso A ON U.ID_perfil_acceso = A.ID_perfil
+                            JOIN 
+                                Acceso_perfil_punto APP ON A.ID_perfil = APP.ID_perfil
+                            JOIN 
+                                Puntos P ON APP.ID_punto = P.ID_punto
+                            WHERE 
+                                U.ID_usuario = %s;
+                        """, (id_usuario,))
+        result = cur.fetchall()
+        cur.close()
+        conn.close()
+        return result

@@ -20,3 +20,12 @@ class UsuarioServicio:
             return puntos_acceso
         return None
 
+    def get_instalaciones_acceso(self, id_usuario):
+        instalaciones_acceso = self.usuario_modelo.get_instalaciones_acceso_bbdd(id_usuario)
+        if instalaciones_acceso:
+            return instalaciones_acceso
+        return None
+
+
+
+
