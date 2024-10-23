@@ -1,5 +1,5 @@
 from flask import Flask
-from Interfaces.entradas import main
+from Aplicacion.entradas import main
 
 
 def create_app():
