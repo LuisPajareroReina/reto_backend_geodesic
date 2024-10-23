@@ -1,7 +1,7 @@
 """
 En esta clase se definen los casos de uso del problema
 """
-from Dominio.modelos import Usuario, Punto, RegistroAcceso
+from Dominio.modelos import Usuario, Punto
 
 
 class ServicioUsuario:
@@ -43,6 +43,7 @@ class ServicioUsuario:
         response = self.usuario_modelo.add_acceso_punto_bbdd(usuario,id_punto)
         return response
 
+
 class ServicioPunto:
     def __init__(self, punto_modelo):
         self.punto_modelo = punto_modelo
@@ -52,14 +53,4 @@ class ServicioPunto:
         if datos_punto:
             return Punto(*datos_punto)
         return None
-
-class ServicioRegistroAcceso:
-    def __init__(self, registro_modelo):
-        self.registro_modelo = registro_modelo
-
-    def set_registro(self, id_usuario, id_punto, datetime):
-        registro_acceso = RegistroAcceso(id_usuario, id_punto, datetime)
-        registro_acceso.set_registro(self.registro_modelo)
-
-
 

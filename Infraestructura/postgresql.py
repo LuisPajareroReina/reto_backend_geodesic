@@ -172,39 +172,6 @@ class UsuarioBBDD:
             return result
 
 
-
-class PuntoBBDD:
-    def __init__(self, config_bbdd):
-        self.config_bbdd = config_bbdd
-
-    def conexion_bbdd(self):
-        # con **self.config_bbdd desempaquetamos el dict y lo pasamos como parametros
-        conn = psycopg2.connect(**self.config_bbdd)
-        return conn
-
-    def get_punto_bbdd(self, id_punto):
-        conn = self.conexion_bbdd()
-        cur = conn.cursor()
-        cur.execute("""
-                    SELECT * FROM Puntos
-                    WHERE id_puto = %s
-                """, (id_punto,))
-        result = cur.fetchall()
-        cur.close()
-        conn.close()
-        return result
-
-class PerfilAccesoBBDD:
-    def __init__(self, config_bbdd):
-        self.config_bbdd = config_bbdd
-
-    def conexion_bbdd(self):
-        # con **self.config_bbdd desempaquetamos el dict y lo pasamos como parametros
-        conn = psycopg2.connect(**self.config_bbdd)
-        return conn
-
-
-
 class RegistroAccesoBBDD:
     def __init__(self, config_bbdd):
         self.config_bbdd = config_bbdd

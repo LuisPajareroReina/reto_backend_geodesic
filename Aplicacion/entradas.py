@@ -1,3 +1,7 @@
+"""
+Clase donde se definen las entradas (peticiones simuladas del front-end) que interactuan con el back-end
+"""
+
 from flask import Blueprint, request
 from datetime import datetime
 
@@ -20,6 +24,9 @@ main = Blueprint('main', __name__)
 
 @main.route('/<int:id_usuario>', methods=['GET'])
 def login(id_usuario):
+    """
+    OBTENER LA INFORMACIÓN DE UN USUSARIO
+    """
     # Obtener la contraseña desde el header
     password = request.headers.get('Authorization')
 
@@ -56,6 +63,9 @@ def login(id_usuario):
 
 @main.route('/<int:id_usuario>/<int:id_punto>', methods=['GET'])
 def acceder_punto(id_usuario, id_punto):
+    """
+    ACCESO DE UN USUARIO DADO A UN PUNTO DADO
+    """
     #obtener la contraseña del header
     password = request.headers.get('Authorization')
 
@@ -96,6 +106,9 @@ def acceder_punto(id_usuario, id_punto):
 
 @main.route('/delete/<int:id_usuario>', methods=['DELETE'])
 def delete_usuario(id_usuario):
+    """
+    ELIMINA UN USUARIO DADO
+    """
     try:
         usuario_bbdd = UsuarioBBDD(config_bbdd)
         servicio_usuario = ServicioUsuario(usuario_bbdd)
@@ -103,10 +116,13 @@ def delete_usuario(id_usuario):
         response = servicio_usuario.detele_usuario(id_usuario)
         return response
     except Exception as e:
-        return {'error': str(e)}, 500
+        return {'error': str(e)}
 
 @main.route('/delete/<int:id_usuario>/<int:id_punto>', methods=['DELETE'])
 def delete_acceso_punto(id_usuario, id_punto):
+    """
+    ELIMINAR EL ACCESO DE UN USUARIO DADO A UN PUNTO DADO
+    """
     try:
         usuario_bbdd = UsuarioBBDD(config_bbdd)
         servicio_usuario = ServicioUsuario(usuario_bbdd)
@@ -120,6 +136,9 @@ def delete_acceso_punto(id_usuario, id_punto):
 
 @main.route('/add/<int:id_usuario>/<int:id_punto>', methods=['POST'])
 def add_acceso_punto(id_usuario, id_punto):
+    """
+    CONCEDER EL ACCESO DE UN USUARIO DADO A UN PUNTO DADO
+    """
     try:
         usuario_bbdd = UsuarioBBDD(config_bbdd)
         servicio_usuario = ServicioUsuario(usuario_bbdd)

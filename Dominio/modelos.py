@@ -1,5 +1,5 @@
 """
-Clase dedicada al core del backend y definir las clases
+Clase dedicada a definir las clases y sus atributos
 """
 from datetime import datetime
 
@@ -37,17 +37,6 @@ class Usuario:
                 return punto
 
         return None
-
-
-class Perfil_acceso:
-    def __init__(self, id_perfil_acceso, descripcion):
-        self.id_perfil_acceso = id_perfil_acceso
-        self.descripcion = descripcion
-
-class Acceso_perfil_punto:
-    def __init__(self, id_perfil_acceso, id_punto):
-        self.id_perfil_acceso = id_perfil_acceso
-        self.id_punto = id_punto
 
 
 class Punto:

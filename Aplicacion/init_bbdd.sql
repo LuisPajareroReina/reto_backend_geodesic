@@ -1,7 +1,91 @@
-TRUNCATE TABLE public.acceso_perfil_punto;
---SELECT * FROM public.acceso_perfil_punto;
+-- Archivo para crear una base de datos de prueba
+-- NOTA: SI LA BASE DE DATOS TE DICE QUE NO TIENES PERMISOS REVISAR EL OWNER DE LAS TABLAS PSQL
 
-INSERT INTO acceso_perfil_punto (id_perfil, id_punto) VALUES
+-- Eliminar el contenido de las tablas o las tablas mismas si no existen previamente
+--DROP TABLE IF EXISTS Registro_acceso;
+DROP TABLE IF EXISTS Usuarios;
+DROP TABLE IF EXISTS Acceso_perfil_punto;
+DROP TABLE IF EXISTS Puntos;
+DROP TABLE IF EXISTS perfil_acceso;
+
+CREATE TABLE Puntos (
+    ID_punto SERIAL PRIMARY KEY,
+    nombre_instalacion VARCHAR(100),
+    descripcion VARCHAR(100)
+);
+
+CREATE TABLE Perfil_acceso (
+    ID_perfil_acceso SERIAL PRIMARY KEY,
+    descripcion VARCHAR(100)
+);
+
+
+CREATE TABLE Usuarios (
+    ID_usuario SERIAL PRIMARY KEY,
+    ID_perfil_acceso INT,
+    Nombre VARCHAR(50),
+    Apellido VARCHAR(50),
+    Empresa VARCHAR(50),
+    password VARCHAR(50),
+    FOREIGN KEY (ID_perfil_acceso) REFERENCES Perfil_acceso(ID_perfil_acceso)
+);
+
+CREATE TABLE Acceso_perfil_punto (
+    ID_perfil_acceso INT,
+    ID_punto INT,
+	FOREIGN KEY (ID_perfil_acceso) REFERENCES Perfil_acceso(ID_perfil_acceso),
+	FOREIGN KEY (ID_punto) REFERENCES Puntos(ID_punto)
+);
+
+CREATE TABLE Registro_acceso (
+    ID_registro SERIAL PRIMARY KEY,
+    ID_usuario INT,
+    ID_punto INT,
+    fecha_hora_acceso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario),
+    FOREIGN KEY (ID_punto) REFERENCES Puntos(ID_punto)
+);
+
+
+
+INSERT INTO puntos (nombre_instalacion, descripcion) VALUES
+--1
+('Gimnasio GoFit Talavera', 'Monitoreo de PH agua'),
+('Gimnasio GoFit Talavera', 'Monitoreo de tensión eléctrica punto 1'),
+('Gimnasio GoFit Talavera', 'Actuador Naranja'),
+('Gimnasio GoFit Talavera', 'Actuador Verde'),
+--5
+('Gimnasio GoFit Valladolid', 'Monitoreo de PH agua'),
+('Gimnasio GoFit Valladolid', 'Actuador Azul'),
+('Gimnasio GoFit Valladolid', 'Contador de litros de agua'),
+--8
+('Nestle', 'Monitoreo de PH agua'),
+('Nestle', 'Monitoreo nivel de agua'),
+('Nestle', 'Válvula de vaciado'),
+('Nestle', 'Actuador Naranja'),
+('Nestle', 'Actuador Morado');
+
+
+
+INSERT INTO perfil_acceso (descripcion) VALUES
+('Monitoreo GoFit Talavera'), --1
+('Actuador Naranja GoFit Talavera'), --2
+('Actuadores GoFit Talavera'), --3
+('Admin GoFit Talavera y Valladolid'), --4
+
+('Monitoreo GoFit Talavera y Valladolid'), --5
+('Mantenimiento GoFit Valladolid'), --6
+('Admin GoFit Valladolid'), --7
+
+('Monitoreo del tanque agua Nestle'), --8
+('Trabajadores de la planta Nestle'), --9
+('Mantenimiento del tanque de agua Nestle'), --10
+('Admin Nestle'), --11
+('Monitoreo GoFit Talavera y Valladolid'); --12
+
+
+
+INSERT INTO acceso_perfil_punto (ID_perfil_acceso, id_punto) VALUES
 (1,1),
 (1,2),
 
@@ -47,9 +131,6 @@ INSERT INTO acceso_perfil_punto (id_perfil, id_punto) VALUES
 (11,11),
 (11,12);
 
-SELECT * FROM public.acceso_perfil_punto;
-
-TRUNCATE TABLE public.usuarios;
 
 INSERT INTO Usuarios (ID_perfil_acceso, Nombre, Apellido, Empresa, password) VALUES
 (1, 'Alberto', 'Villalba', 'GoFit Talavera', '123456789'), --1
@@ -67,3 +148,4 @@ INSERT INTO Usuarios (ID_perfil_acceso, Nombre, Apellido, Empresa, password) VAL
 (9, 'Juan', 'Rubio', 'Nestle', '123456789'),
 (10, 'Paco', 'Jimenez', 'Nestle', '123456789'),
 (11, 'Fernando', 'Alonso', 'Nestle', 'admin');
+
