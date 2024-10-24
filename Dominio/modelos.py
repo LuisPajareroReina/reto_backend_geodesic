@@ -52,5 +52,4 @@ class RegistroAcceso:
         self.id_punto = id_punto
         self.fecha_hora_acceso = fecha_hora_acceso or datetime.now()
 
-    def set_registro(self, registro_acceso_bbdd):
-        registro_acceso_bbdd.set_registro_acceso_bbdd(self)
+

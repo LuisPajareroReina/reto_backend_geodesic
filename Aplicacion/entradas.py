@@ -7,12 +7,12 @@ from datetime import datetime
 
 from Dominio.modelos import RegistroAcceso
 from Infraestructura.postgresql import UsuarioBBDD, RegistroAccesoBBDD
-from Dominio.servicios import ServicioUsuario, ServicioPunto
+from Dominio.servicios import ServicioUsuario, ServicioRegistroAcceso
 
 # Configuración de la conexión a la base de datos
 config_bbdd = {
     'database': "reto_backend_geodesic",
-    'user': "admin_geodesic",
+    'user': "postgres",
     'host': 'localhost',
     'password': "admin",
     'port': "5433"
@@ -36,7 +36,7 @@ def login(id_usuario):
 
     if usuario:
         if usuario.check_login(password):
-        # Login OK
+            # Login OK
 
             info_usuario = {
                 'id_usuario': usuario.id_usuario,
@@ -66,7 +66,7 @@ def acceder_punto(id_usuario, id_punto):
     """
     ACCESO DE UN USUARIO DADO A UN PUNTO DADO
     """
-    #obtener la contraseña del header
+    # obtener la contraseña del header
     password = request.headers.get('Authorization')
 
     usuario_bbdd = UsuarioBBDD(config_bbdd)
@@ -85,11 +85,15 @@ def acceder_punto(id_usuario, id_punto):
                 punto = usuario.get_punto(id_punto)
 
                 # Crear log
-                registro_acceso = RegistroAcceso(None, id_usuario, id_punto, datetime.now())
                 registro_acceso_bbdd = RegistroAccesoBBDD(config_bbdd)
-                registro_acceso.set_registro(registro_acceso_bbdd)
+                servicio_registro_acceso = ServicioRegistroAcceso(registro_acceso_bbdd)
+
+                registro_acceso = RegistroAcceso(None, id_usuario, id_punto, datetime.now())
+
+                servicio_registro_acceso.set_registro(registro_acceso)
 
                 return (
+                    f"Instalacion: {punto.nombre_instalacion}\n"
                     f"Acceso al punto {id_punto} : {punto.descripcion}\n"
                     f"Usuario ID {id_usuario} : {usuario.nombre} {usuario.apellido}\n"
                     f"Fecha: {registro_acceso.fecha_hora_acceso}")
@@ -118,6 +122,7 @@ def delete_usuario(id_usuario):
     except Exception as e:
         return {'error': str(e)}
 
+
 @main.route('/delete/<int:id_usuario>/<int:id_punto>', methods=['DELETE'])
 def delete_acceso_punto(id_usuario, id_punto):
     """
@@ -134,6 +139,7 @@ def delete_acceso_punto(id_usuario, id_punto):
     except Exception as e:
         return {'error': str(e)}, 500
 
+
 @main.route('/add/<int:id_usuario>/<int:id_punto>', methods=['POST'])
 def add_acceso_punto(id_usuario, id_punto):
     """
@@ -146,6 +152,26 @@ def add_acceso_punto(id_usuario, id_punto):
 
         response = servicio_usuario.add_acceso_punto(usuario, id_punto)
         return response
+
+    except Exception as e:
+        return {'error': str(e)}, 500
+
+
+@main.route('/log/all', methods=['GET'])
+def get_todos_accesos_punto():
+    """
+    MOSTRAR EL LOG DE ACCESOS
+    """
+    try:
+
+        registro_acceso_bbdd = RegistroAccesoBBDD(config_bbdd)
+        servicio_registro_acceso = ServicioRegistroAcceso(registro_acceso_bbdd)
+        response = servicio_registro_acceso.get_todos_registros_acceso()
+
+        if isinstance(response, list):
+            return {'registros': response}, 200
+        else:
+            return response, 404  # Si no se encuentran registros
 
     except Exception as e:
         return {'error': str(e)}, 500

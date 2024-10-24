@@ -130,13 +130,13 @@ class UsuarioBBDD:
                                     WHERE id_perfil_acceso = %s AND id_punto = %s;      
                             """, (id_perfil_acceso,id_punto))
             conn.commit()
-            result = f"El acceso al punto {id_punto} ha sido eliminado para el usuario {usuario.id_usuario}: {usuario.nombre}."
+            result = f"El acceso al punto [ID: {id_punto}] ha sido eliminado para el usuario [ID: {usuario.id_usuario} | {usuario.nombre}]."
             cur.close()
             conn.close()
             return result
 
         else:
-            return "El acceso no existe/no se encuentra"
+            return f"El usuario [ID: {usuario.id_usuario} | {usuario.nombre}] no tiene acceso al punto [ID: {id_punto}]"
 
     def add_acceso_punto_bbdd(self, usuario, id_punto):
         # Añadir al perfil_acceso el punto asociado
@@ -158,7 +158,7 @@ class UsuarioBBDD:
         check = cur.fetchone()
 
         if check:
-            return f"El usuario {usuario.id_usuario}: {usuario.nombre} ya tiene acceso al punto {id_punto}"
+            return f"El usuario [ID: {usuario.id_usuario} | {usuario.nombre}] ya tiene acceso al punto [ID: {id_punto}]"
 
         else:
             cur.execute("""
@@ -166,11 +166,33 @@ class UsuarioBBDD:
                                 (%s,%s);      
                         """, (id_perfil_acceso, id_punto))
             conn.commit()
-            result = f"El acceso al punto {id_punto} ha sido eliminado para el usuario {usuario.id_usuario}: {usuario.nombre}."
+            result = f"Se ha concedido el acceso al punto [ID: {id_punto}] para el usuario [ID: {usuario.id_usuario} | {usuario.nombre}]."
             cur.close()
             conn.close()
             return result
+class PuntoBBDD:
+    def __init__(self, config_bbdd):
+        self.config_bbdd = config_bbdd
 
+    def conexion_bbdd(self):
+        # con **self.config_bbdd desempaquetamos el dict y lo pasamos como parametros
+        conn = psycopg2.connect(**self.config_bbdd)
+        return conn
+
+    def get_instalacion(self, id_punto):
+        conn = self.conexion_bbdd()
+        cur = conn.cursor()
+
+        cur.execute("SELECT nombre_instalacion FROM Puntos WHERE id_punto = %s", id_punto)
+
+        nombre_instalacion = cur.fetchall()
+
+        cur.close()
+        conn.close()
+
+        if nombre_instalacion:
+            return nombre_instalacion
+        return None
 
 class RegistroAccesoBBDD:
     def __init__(self, config_bbdd):
@@ -196,3 +218,17 @@ class RegistroAccesoBBDD:
                                    registro_acceso.id_punto,
                                    registro_acceso.fecha_hora_acceso))
             conn.commit()
+
+    def get_todos_registros_acceso_bbdd(self):
+        conn = self.conexion_bbdd()
+        cur = conn.cursor()
+
+        cur.execute("SELECT * FROM Registro_acceso")
+        registros = cur.fetchall()
+
+        cur.close()
+        conn.close()
+
+        return registros if registros else []
+
+
