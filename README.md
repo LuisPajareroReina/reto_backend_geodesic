@@ -1,5 +1,5 @@
 # Reto backend Geodesic
-https://github.com/LuisPajareroReina/reto_backend_geodesic.git
+
 
 Para el desarrollo de esta prueba técnica he utilizado:
 
@@ -12,7 +12,7 @@ Para el desarrollo de esta prueba técnica he utilizado:
 
 ### Preguntas
 
-1. ¿Qué tablas o entidades y con qué campos relevantes? ¿Qué relaciones habría entre ellas y por medio de qué campos, que permitan las consultas cruzadas o la modificación o eliminación de datos?
+1. **¿Qué tablas o entidades y con qué campos relevantes? ¿Qué relaciones habría entre ellas y por medio de qué campos, que permitan las consultas cruzadas o la modificación o eliminación de datos?**
 
 ```sql
 CREATE TABLE Puntos (
@@ -54,14 +54,15 @@ CREATE TABLE Registro_acceso (
 );
 
 ```
-2. ¿Hay alguna tabla donde se podrían incluir alguno datos a pesar de no conocer aún los usuarios y las instalaciones o puntos del sistema?
+2. **¿Hay alguna tabla donde se podrían incluir alguno datos a pesar de no conocer aún los usuarios y las instalaciones o puntos del sistema?**
 
-En mis tablas, basándome en las dependencias se podrían ir creando perfiles de acceso en la tabla Perfil_acceso.
+En mis tablas, basándome en las dependencias, se podrían ir creando perfiles de acceso en la tabla Perfil_acceso.
 
-3. ¿Es necesario o conveniente utilizar otros mecanismos en la base de datos como triggers o procedimientos almacenados para algún fin? Y en tal caso, ¿Cuáles serían y qué funcionalidad tendrían?
+3. **¿Es necesario o conveniente utilizar otros mecanismos en la base de datos como triggers o procedimientos almacenados para algún fin? Y en tal caso, ¿Cuáles serían y qué funcionalidad tendrían?**
 
-Se podrían utilizar triggers para ejecutar acciones automáticas cuando, por ejemplo, si se crea un nuevo punto en la instalación se conceda el acceso al administrador
-
+Durante el desarrollo he podido notar que harían falta algunas automatizaciones con trigger:
+- Si se crea un nuevo punto en una instalación se conceda el acceso a dicho punto al administrador automáticamente
+- Cuando se elimina un usuario gestionar de manera automática las dependencias para no eliminar esos datos de otras tablas
 
 
 ### Visualización de la base de datos
