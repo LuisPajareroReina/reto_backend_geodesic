@@ -42,7 +42,7 @@ CREATE TABLE Registro_acceso (
     ID_usuario INT,
     ID_punto INT,
     fecha_hora_acceso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario),
+    FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_punto) REFERENCES Puntos(ID_punto)
 );
 
@@ -144,11 +144,11 @@ INSERT INTO Usuarios (ID_perfil_acceso, Nombre, Apellido, Empresa, password) VAL
 (5, 'Belen', 'Sainz', 'GYM X', '123456789'),--6
 (6, 'Pedro', 'Gomez', 'GYM X', '123456789'),--7
 (6, 'Amancio', 'Sanchez', 'GYM X', '123456789'),
-(7, 'Maria', 'Martin', 'GYM X', 'admin'),
+(7, 'Maria', 'Martin', 'Empresa alimentaria', 'admin'),
 (8, 'Javier', 'Morales', 'Empresa alimentaria', '123456789'),
 (9, 'Lucia', 'Lopez', 'Empresa alimentaria', '123456789'),
 (9, 'Mario', 'Sanz', 'Empresa alimentaria', '123456789'),
 (9, 'Juan', 'Rubio', 'Empresa alimentaria', '123456789'),
 (10, 'Paco', 'Jimenez', 'Empresa alimentaria', '123456789'),
-(11, 'Fernando', 'Garcia', 'Empresa alimentaria', 'admin');
+(11, 'Fernando', 'Garcia', 'GYM X', 'admin');
 

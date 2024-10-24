@@ -90,19 +90,36 @@ class UsuarioBBDD:
         conn.close()
         return result
 
-
     def delete_usuario_bbdd(self, id_usuario):
         conn = self.conexion_bbdd()
         cur = conn.cursor()
+
+        # doble check
         cur.execute("""
-                            DELETE FROM Usuarios
-                            WHERE id_usuario = %s;
-                """, (id_usuario,))
-        conn.commit()
-        result = f"Usuario con id {id_usuario} ha sido eliminado."
-        cur.close()
-        conn.close()
-        return result
+                                SELECT id_usuario FROM Usuarios
+                                WHERE id_usuario = %s;
+                            """, (id_usuario,))
+
+        check = cur.fetchone()
+
+        if check:
+            cur.execute("""
+                                DELETE FROM Usuarios
+                                WHERE id_usuario = %s;
+                            """, (id_usuario,))
+            conn.commit()
+            result = f"Usuario [ID: {id_usuario}] ha sido eliminado."
+            cur.close()
+            conn.close()
+
+            return result
+
+        else:
+
+            return f"El usuario [ID: {id_usuario}] no existe en la base de datos"
+
+
+
 
     def detele_acceso_punto_bbdd(self, usuario, id_punto):
         # Eliminar del perfil_acceso el punto asociado
@@ -128,7 +145,7 @@ class UsuarioBBDD:
             cur.execute("""
                                 DELETE FROM acceso_perfil_punto
                                     WHERE id_perfil_acceso = %s AND id_punto = %s;      
-                            """, (id_perfil_acceso,id_punto))
+                            """, (id_perfil_acceso, id_punto))
             conn.commit()
             result = f"El acceso al punto [ID: {id_punto}] ha sido eliminado para el usuario [ID: {usuario.id_usuario} | {usuario.nombre}]."
             cur.close()
@@ -170,6 +187,8 @@ class UsuarioBBDD:
             cur.close()
             conn.close()
             return result
+
+
 class PuntoBBDD:
     def __init__(self, config_bbdd):
         self.config_bbdd = config_bbdd
@@ -193,6 +212,7 @@ class PuntoBBDD:
         if nombre_instalacion:
             return nombre_instalacion
         return None
+
 
 class RegistroAccesoBBDD:
     def __init__(self, config_bbdd):
@@ -230,5 +250,3 @@ class RegistroAccesoBBDD:
         conn.close()
 
         return registros if registros else []
-
-

@@ -1,7 +1,7 @@
 """
 En esta clase se definen los casos de uso del problema
 """
-from Dominio.modelos import Usuario, Punto
+from Dominio.modelos import Usuario
 
 
 class ServicioUsuario:
