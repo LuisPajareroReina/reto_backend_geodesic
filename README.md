@@ -69,8 +69,10 @@ Durante el desarrollo he podido notar que harían falta algunas automatizaciones
 
 A continuación expongo la visualización de la base de datos que se puede encontrar en el archivo: [init_bbdd.sql](Aplicacion/init_bbdd.sql)
 
+Este esquema está disponible en el repositorio: [esquema_reto_geodesic.jpg](sources/esquema_reto_geodesic.jpg)
+
 Las características generales son:
-- 3 instalaciones con varios usuarios
+- 3 instalaciones con varios puntos y varios usuarios
 - Los admin tienen  acceso a todos los puntos de sus instalaciones
 - Existen varios tipos de perfil de acceso
 
@@ -92,6 +94,7 @@ Para mejorar la comprensión de la base de datos utilizada para la validación d
 ## Arquitectura
 
 ### Arquitectura hexagonal
+
 - Dominio
   - modelos.py --> Clases del proyecto (Usuario, etc..)
   - servicios.py --> Casos de uso (Obtener puntos de acceso, obtener ususario...)
@@ -104,58 +107,81 @@ Para mejorar la comprensión de la base de datos utilizada para la validación d
 
 ### Login
 
-- <Rule '/<id_usuario>'>
+- **<Rule '/<id_usuario>'>**
   - Metodo: GET
   - Objetivo: Acceso a los datos de ususario (simulación de la pantalla de inicio)
   - Nota: password en el header mediante el atributo "Authorization"
   - Robusto frente a ID/contraseñas incorrectas
   
   ![Login](sources/login.PNG)
+  - **respuesta:**
+  
+  
+  ![respuesta_login](sources/respuesta_login.PNG)
+
 
 ### Gestión de acceso a puntos
 
-- <Rule '/<id_usuario>/<id_punto>'>
+- **<Rule '/<id_usuario>/<id_punto>'>**
   - Metodo: GET
   - Objetivo: Acceso a un punto
   - Nota: password en el header mediante el atributo "Authorization"
   - Robusto frente a ID/contraseñas incorrectas
   - Robusto frente a puntos incorrectos
 
-  ![Acceso a un punto](sources/acceder_a_punto.PNG)
+  ![Acceso a un punto](sources/acceder_punto.PNG)
 
 
-- <Rule '/add/<id_usuario>/<id_punto>'>
+- **<Rule '/add/<id_usuario>/<id_punto>'>**
   - Metodo: POST
   - Objetivo: Añadir el acceso de un punto al perfil de acceso del usuario
   - Evita duplicaciones en la base de datos
 
   ![Añadir acceso a un punto](sources/añadir_punto.PNG)
 
+  - **Respuesta:**
+  
+   ![respuesta_ñadir acceso a un punto](sources/respuesta_añadir_punto.PNG)
 
-- <Rule '/delete/<id_usuario>/<id_punto>'>
+
+- **<Rule '/delete/<id_usuario>/<id_punto>'>**
   - Metodo: DELETE
   - Objetivo: Eliminar el acceso de un punto al perfil de acceso del usuario
   - Evita duplicaciones en la base de datos
 
   ![Eliminar acceso a un punto](sources/eliminar_punto.PNG)
 
+  - **Respuesta:**
+  
+  ![respuesta_elimnar acceso a un punto](sources/respuesta_eliminar_punto.PNG)
+
+
 
 ### Gestión de usuarios
 
-- <Rule '/delete/<id_usuario>'>
+- **<Rule '/delete/<id_usuario>'>**
   - Metodo: DELETE
   - Objetivo: Eliminar un usuario de la base de datos
   - Evita duplicaciones en la base de datos
 
   ![Eliminar Usuario](sources/eliminar_usuario.PNG)
 
+  - **Respuesta:**
+  
+  ![Respuesta_eliminar punto](sources/respuesta_eliminar_usuario.PNG)
+
 
 ### Log
 
-- <Rule '/log/all'>
+- **<Rule '/log/all'>**
   - Metodo: GET
   - Objetivo: Consultar los accesos a los puntos de la base de datos
 
   ![Log](sources/log.PNG)
+
+  - **Respuesta:**
+  
+  ![Log](sources/respuesta_registros.PNG)
+
 
 
